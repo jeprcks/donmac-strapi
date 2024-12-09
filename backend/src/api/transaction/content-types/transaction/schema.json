@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transactions",
+  "info": {
+    "singularName": "transaction",
+    "pluralName": "transactions",
+    "displayName": "transaction"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "orderItems": {
+      "type": "json"
+    },
+    "totalAmount": {
+      "type": "decimal",
+      "required": true
+    },
+    "totalQuantity": {
+      "type": "integer",
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "transactions"
+    },
+    "orderDate": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}
