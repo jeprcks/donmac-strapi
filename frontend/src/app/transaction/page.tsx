@@ -7,19 +7,21 @@ import Link from 'next/link';
 
 interface Transaction {
     id: number;
-    attributes: {
-        orderItems: {
-            product: {
-                id: number;
-                name: string;
-                price: number;
-            };
-            quantity: number;
-        }[];
-        totalAmount: number;
-        totalQuantity: number;
-        orderDate: string;
-    }
+    documentId: string;
+    orderDate: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    orderItems: {
+        product: {
+            id: number;
+            name: string;
+            price: number;
+        };
+        quantity: number;
+    }[];
+    totalAmount: number;
+    totalQuantity: number;
 }
 
 function TransactionPage() {
@@ -39,7 +41,7 @@ function TransactionPage() {
 
                 const response = await fetch(`http://localhost:1337/api/transactions?filters[user][id][$eq]=${userId}&sort[0]=createdAt:desc`, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        // Authorization: `Bearer ${token}`,
                     },
                 });
 
@@ -48,7 +50,8 @@ function TransactionPage() {
                 }
 
                 const data = await response.json();
-                console.log('Transaction data:', JSON.stringify(data, null, 2));
+                // console.log('Transaction data:', JSON.stringify(data, null, 2));
+                console.log(data.data)
                 setTransactions(data.data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An error occurred');
@@ -80,7 +83,7 @@ function TransactionPage() {
         <div className="min-h-screen bg-gradient-to-br from-[#3C2A21] to-[#1A120B] p-8">
             <div className="max-w-4xl mx-auto">
                 <div className="flex items-center gap-4 mb-8">
-                    <Link href="/order" className="text-[#D5CEA3] hover:text-[#E5E5CB] transition-colors">
+                    <Link href="/Order" className="text-[#D5CEA3] hover:text-[#E5E5CB] transition-colors">
                         <FontAwesomeIcon icon={faArrowLeft} className="w-6 h-6" />
                     </Link>
                     <h1 className="text-3xl font-bold text-[#D5CEA3]">Transaction History</h1>
@@ -91,12 +94,12 @@ function TransactionPage() {
                         <div key={transaction.id} className="bg-[#E5E5CB]/10 backdrop-blur-sm rounded-xl p-6">
                             <div className="mb-4">
                                 <div className="text-[#D5CEA3] text-sm">
-                                    Order Date: {formatDate(transaction.attributes.orderDate)}
+                                    Order Date: {formatDate(transaction.orderDate)}
                                 </div>
                             </div>
 
                             <div className="space-y-4 mb-4">
-                                {transaction.attributes.orderItems.map((item, index) => (
+                                {transaction.orderItems.map((item, index) => (
                                     <div key={index} className="flex justify-between items-center">
                                         <div className="text-[#D5CEA3]">
                                             <div>{item.product.name}</div>
@@ -115,13 +118,13 @@ function TransactionPage() {
                                 <div className="flex justify-between items-center">
                                     <span className="text-[#D5CEA3]">Total Items:</span>
                                     <span className="text-[#D5CEA3] font-bold">
-                                        {transaction.attributes.totalQuantity}
+                                        {transaction.totalQuantity}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center text-lg">
                                     <span className="text-[#D5CEA3]">Total Amount:</span>
                                     <span className="text-[#D5CEA3] font-bold">
-                                        ${transaction.attributes.totalAmount.toFixed(2)}
+                                        ${transaction.totalAmount.toFixed(2)}
                                     </span>
                                 </div>
                             </div>

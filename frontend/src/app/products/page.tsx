@@ -55,7 +55,7 @@ function ProductList() {
         try {
             setIsLoading(true);
             setError(null);
-            const response = await fetch('http://localhost:1337/api/products?populate=*', {
+            const response = await fetch('/api/products', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -122,12 +122,8 @@ function ProductList() {
                 }
             };
 
-            const url = isEditing
-                ? `/api/products/${editingProductId}`
-                : '/api/products';
-
-            const productResponse = await fetch(url, {
-                method: isEditing ? 'PUT' : 'POST',
+            const productResponse = await fetch('http://localhost:1337/api/products', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -151,7 +147,7 @@ function ProductList() {
                     formDataWithFiles.append('files', file);
                 });
 
-                const uploadResponse = await fetch('/api/upload', {
+                const uploadResponse = await fetch('http://localhost:1337/api/upload', {
                     method: 'POST',
                     body: formDataWithFiles,
                 });

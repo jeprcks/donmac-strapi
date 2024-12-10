@@ -101,7 +101,9 @@ function OrderPage() {
                     orderlist: formattedOrderItems,
                     totalorder: totalPrice.toString(),
                     quantity: totalQuantity.toString(),
-                    user: userId
+                    user: {
+                        connect: [{ id: userId }]
+                    }
                 }
             };
 
@@ -109,10 +111,12 @@ function OrderPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    // Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(orderData),
             });
+
+            console.log(orderResponse);
 
             if (!orderResponse.ok) {
                 const orderError = await orderResponse.json();
@@ -126,7 +130,9 @@ function OrderPage() {
                     totalAmount: totalPrice,
                     totalQuantity: totalQuantity,
                     orderDate: new Date().toISOString(),
-                    user: userId
+                    user: {
+                        connect: [{ id: userId }]
+                    }
                 }
             };
 
@@ -134,7 +140,7 @@ function OrderPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    // Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(transactionData),
             });
@@ -149,7 +155,7 @@ function OrderPage() {
             window.location.href = '/transaction';
 
         } catch (err) {
-            console.error('Checkout error:', err);
+            console.log('Checkout error:', err);
             setError(err instanceof Error ? err.message : 'Failed to create order');
         }
     };
